@@ -1,48 +1,51 @@
+const { getGame, getId, nameGame, genreGet } = require('../Controllers/getControllers');
 
-
-const getName = (req,res)=>{
-    const {Nombre} = req.query;
-    
+const getVideoGame = async (req,res) => {
+    const {name} = req.query;
     try {
-        res.status(200).send(`Aca Busca X EL Nombre: ${Nombre}`);
-    } catch (error) {
-     res.status(400).send(`El Nombre: ${Nombre} No Existe en la DB`);   
-    }
-};
-
-const getById = (req,res)=>{
-const {Id} = req.params;
-try {
-    res.status(200).send(`ACa Busca por el ID: ${Id}`);
-} catch (error) {
-    res.status(400).send(`No se encontro el ID: ${Id}`)
-}
-};
-
-const getGenre = (req,res)=>{
-    try {
-        res.status(200).send('Aca encuentras X GENERO');
-    } catch (error) {
+        if (name){
+            const response = await nameGame(name);
+            res.status(200).json(response);
         
-    }
-};
-
-const getVideoGame = (req,res)=>{
-    try {
-        res.status(200).send('Aca encuentras el ARRAY')
+        }else{
+            const response = await getGame();
+            res.status(200).json(response);
+        }
     } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
+const getById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const response = await getId(id);
+        if(!response)
+        res.status(400).json({error: error.message});
+        res.status(200).json(response);
         
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
 
 
 
+
+const getGenre = async (req, res) => {
+    try {
+        const response = await genreGet();
+        res.status(200).json(response);
+    } catch (error) {
+res.status(400).json({error: error.message});
+    }
+};
 
 
 
 
 module.exports = {
-    getName,
     getById,
     getGenre,
     getVideoGame
