@@ -1,7 +1,7 @@
 const axios = require('axios'); // importamos axios para hacer las peticiones a la api y a la base de datos
 require('dotenv').config();
 const { KEY } = process.env; // importamos la api key de la api de rawg desde las variables de entorno
-const url = `https://api.rawg.io/api/games/{id}`;
+const url = `https://api.rawg.io/api/games`;
 // creamos la url de la api de rawg CON SU APIKEY
 const { Videogame, Genres} = require('../db.js'); // importamos el modelo de la base de datos
 
@@ -12,7 +12,7 @@ const getGameById = async (req, res) => {
 
     try {
          // Si el ID parece ser un UUID válido, buscar en la base de datos
-        if (/^[0-9a-fA-F-]{36}$/.test(id)) {
+        if (isNaN(id)) {
            
             let gameDB = await Videogame.findByPk(id, { include:{
                 model:Genres,
@@ -36,10 +36,10 @@ const getGameById = async (req, res) => {
                 // Si se encuentra en la base de datos, retornarlo
                 return res.json(DBgameMapeo);
             }
-        }
+        } else {
 
-        const responseApi = await axios.get(`${url}?key=${KEY}`);
-        const gameApi = responseApi.data.results;
+        const responseApi = await axios.get(`${url}/${id}?key=${KEY}`);
+        const gameApi = responseApi.data
 
         if (gameApi) {
             // Verificamos si la respuesta de la API contiene datos
@@ -55,6 +55,7 @@ const getGameById = async (req, res) => {
             };
             return res.json(game);
         }
+    }
     } catch (error) {
         // Manejo de errores
         console.error('Error:', error);

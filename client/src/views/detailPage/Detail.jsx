@@ -13,6 +13,7 @@ const Details = () => {
     useEffect(() => {
         dispatch(getGameById(id));
     }, [dispatch]); //cada que se monte se hara un dispatch a la action que trae el juego por id
+    
     const { name, image, genres, description, released, rating, platforms } = gameById; // desestrcuturo el objeto que trae el juego por id y lo muestro en el componente que retorna
     return (
         <div className="fondo">

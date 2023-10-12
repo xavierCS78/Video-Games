@@ -4,6 +4,7 @@ const {URL, KEY} = process.env; // importamos la api key de la api de rawg desde
 const url = `${URL}=${KEY}`;
  // creamos la url de la api de rawg CON SU APIKEY
 const { Videogame, Genres } = require('../db.js'); // importamos el modelo de la base de datos
+
 const getAllGames= async (req, res) => {
     try{
         const url2 = `${url}&page_size=40`;
@@ -16,10 +17,7 @@ const getAllGames= async (req, res) => {
 
         const apiGames = apiResponse.slice(0,100).map(game => {      
             
-    //          DESDE AQUI DEBO HABILITAR NUEVAMENTE
-    // const response = await axios.get(url);
-    // const apiGames = response.data.results.slice(0,100).map(game => {
-                 const { name, background_image, rating, released, id, genres,} = game;
+                     const { name, background_image, rating, released, id, genres,} = game;
                 return {
                     id,
                     name,
